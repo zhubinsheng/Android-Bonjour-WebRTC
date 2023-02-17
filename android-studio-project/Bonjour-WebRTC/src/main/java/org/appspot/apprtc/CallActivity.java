@@ -446,7 +446,7 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     }
     // Enable statistics callback.
     peerConnectionClient.enableStatsEvents(true, STAT_CALLBACK_PERIOD);
-    setSwappedFeeds(false /* isSwappedFeeds */);
+    setSwappedFeeds(true /* isSwappedFeeds */);
   }
 
   // Disconnect from remote resources, dispose of local resources, and exit.
