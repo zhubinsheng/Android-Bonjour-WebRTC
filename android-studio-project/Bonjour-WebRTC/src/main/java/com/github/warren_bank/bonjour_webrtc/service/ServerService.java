@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import java.net.InetAddress;
@@ -55,7 +56,7 @@ public class ServerService extends Service {
         mainThreadHandler = new Handler(Looper.getMainLooper());
         bonjour           = null;
 
-        showNotification();
+//        showNotification();
     }
 
     @Override
@@ -76,9 +77,10 @@ public class ServerService extends Service {
 
     @Override
     public void onDestroy() {
+        Log.e("ServerService", "onDestroy");
         mainThreadHandler = null;
 
-        hideNotification();
+//        hideNotification();
     }
 
     // -------------------------------------------------------------------------

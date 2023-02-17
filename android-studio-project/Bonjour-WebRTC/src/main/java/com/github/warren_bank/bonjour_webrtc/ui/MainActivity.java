@@ -38,7 +38,7 @@ import javax.jmdns.ServiceEvent;
 import javax.jmdns.ServiceInfo;
 import javax.jmdns.ServiceListener;
 
-public class MainActivity extends RuntimePermissionsActivity {
+public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
 
     private ListView                      listView;
@@ -155,11 +155,6 @@ public class MainActivity extends RuntimePermissionsActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectedServerListItem = listItems.get(position);
-
-                if (RuntimePermissions.isEnabled(MainActivity.this)) {
-                    onPermissionsGranted();
-                }
-                return;
             }
         });
 
@@ -182,7 +177,9 @@ public class MainActivity extends RuntimePermissionsActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        ServerService.doStop(MainActivity.this);
+        Log.e("MainActivity", "onDestroy");
+
+//        ServerService.doStop(MainActivity.this);
     }
 
     @Override
@@ -195,9 +192,9 @@ public class MainActivity extends RuntimePermissionsActivity {
                     if (!ServerService.isStarted())
                         MulticastLockMgr.acquire(MainActivity.this);
 
-                    bonjour = JmDNS.create(Util.getWlanIpAddress_InetAddress(MainActivity.this));
+//                    bonjour = JmDNS.create(Util.getWlanIpAddress_InetAddress(MainActivity.this));
 
-                    bonjour.addServiceListener(BONJOUR_SERVICE_TYPE, bonjourServiceListener);
+//                    bonjour.addServiceListener(BONJOUR_SERVICE_TYPE, bonjourServiceListener);
                 }
                 catch(Exception e) {}
             }
@@ -237,9 +234,6 @@ public class MainActivity extends RuntimePermissionsActivity {
             case R.id.menu_toggle_server: {
                 selectedServerListItem = null;
 
-                if (RuntimePermissions.isEnabled(MainActivity.this)) {
-                    onPermissionsGranted();
-                }
                 return true;
             }
             case R.id.menu_update_server_alias: {
@@ -256,44 +250,13 @@ public class MainActivity extends RuntimePermissionsActivity {
         }
     }
 
-    // ---------------------------------------------------------------------------------------------
-    // Runtime Permissions:
-    // ---------------------------------------------------------------------------------------------
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        RuntimePermissions.onRequestPermissionsResult(MainActivity.this, requestCode, permissions, grantResults);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        RuntimePermissions.onActivityResult(MainActivity.this, requestCode, resultCode, data);
-    }
-
-    @Override
-    public void onPermissionsGranted() {
-        if (selectedServerListItem == null) {
-            toggleServer();
-        }
-        else {
-            connectToServer(selectedServerListItem);
-            selectedServerListItem = null;
-            finish();
-        }
-    }
-
-    @Override
-    public void onPermissionsDenied(String[] permissions) {
-        String text = "The following list contains required permissions that are not yet granted:\n  " + TextUtils.join("\n  ", permissions);
-        Toast.makeText(MainActivity.this, text, Toast.LENGTH_LONG).show();
-    }
 
     // ---------------------------------------------------------------------------------------------
     // enable/disable local server and its Bonjour registration on LAN:
     // ---------------------------------------------------------------------------------------------
 
     private void toggleServer() {
-        ServerService.doToggle(MainActivity.this);
+        ServerService.doStart(MainActivity.this);
     }
 
     // ---------------------------------------------------------------------------------------------
