@@ -6,7 +6,7 @@
     <string name="pref_generalsettings_callalert_category_title">Inbound Calls.</string>
 
     <string translatable="false" name="pref_generalsettings_callalert_enabled_key">generalsettings_callalert_enabled</string>
-    <string translatable="false" name="pref_generalsettings_callalert_enabled_default">true</string>
+    <string translatable="false" name="pref_generalsettings_callalert_enabled_default">false</string>
     <string name="pref_generalsettings_callalert_enabled_title">Show Alert.</string>
     <string name="pref_generalsettings_callalert_enabled_dlg">Enable alert dialog with options to accept or reject inbound calls.</string>
 

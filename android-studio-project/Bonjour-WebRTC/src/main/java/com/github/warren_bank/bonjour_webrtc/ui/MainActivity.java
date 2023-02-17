@@ -174,6 +174,15 @@ public class MainActivity extends RuntimePermissionsActivity {
 
         SharedPrefs.setDefaultPreferenceValues(MainActivity.this);
         OrgAppspotApprtcGlue.setDefaultPreferenceValues(MainActivity.this);
+
+        ServerService.doStart(MainActivity.this);
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ServerService.doStop(MainActivity.this);
     }
 
     @Override

@@ -24,8 +24,6 @@ public final class RuntimePermissions {
       MANDATORY_PERMISSIONS = new ArrayList<String>();
 
       MANDATORY_PERMISSIONS.add("android.permission.INTERNET");
-      MANDATORY_PERMISSIONS.add("android.permission.MODIFY_AUDIO_SETTINGS");
-      MANDATORY_PERMISSIONS.add("android.permission.RECORD_AUDIO");
     }
 
     public static String[] getMissingPermissions(Activity activity) {
@@ -131,8 +129,8 @@ public final class RuntimePermissions {
     }
 
     public static void requestPermissionDrawOverlays(Activity activity) {
-        Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
-        activity.startActivityForResult(permissionIntent, REQUEST_CODE_DRAWOVERLAYS);
+//        Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + activity.getPackageName()));
+//        activity.startActivityForResult(permissionIntent, REQUEST_CODE_DRAWOVERLAYS);
     }
 
     public static void onActivityResult(RuntimePermissionsActivity activity, int requestCode, int resultCode, Intent data) {
