@@ -44,7 +44,7 @@
 
     <string translatable="false" name="pref_camera2_key">camera2_preference</string>
     <string name="pref_camera2_title">Use Camera2.</string>
-    <string translatable="false" name="pref_camera2_default">true</string>
+    <string translatable="false" name="pref_camera2_default">false</string>
     <string name="pref_camera2_not_supported">Not supported on this device.</string>
 
     <string translatable="false" name="pref_resolution_key">resolution_preference</string>
@@ -70,12 +70,12 @@
     <string translatable="false" name="pref_maxvideobitratevalue_key">maxvideobitratevalue_preference</string>
     <string name="pref_maxvideobitratevalue_title">Video encoder maximum bitrate.</string>
     <string name="pref_maxvideobitratevalue_dlg">Enter video encoder maximum bitrate in kbps.</string>
-    <string translatable="false" name="pref_maxvideobitratevalue_default">1700</string>
+    <string translatable="false" name="pref_maxvideobitratevalue_default">6800</string>
 
     <string translatable="false" name="pref_videocodec_key">videocodec_preference</string>
     <string name="pref_videocodec_title">Default video codec.</string>
     <string name="pref_videocodec_dlg">Select default video codec.</string>
-    <string translatable="false" name="pref_videocodec_default">VP8</string>
+    <string translatable="false" name="pref_videocodec_default">H264 High</string>
 
     <string translatable="false" name="pref_hwcodec_key">hwcodec_preference</string>
     <string name="pref_hwcodec_title">Video codec hardware acceleration.</string>
@@ -85,12 +85,12 @@
     <string translatable="false" name="pref_capturetotexture_key">capturetotexture_preference</string>
     <string name="pref_capturetotexture_title">Video capture to surface texture.</string>
     <string name="pref_capturetotexture_dlg">Capture video to textures (if available).</string>
-    <string translatable="false" name="pref_capturetotexture_default">true</string>
+    <string translatable="false" name="pref_capturetotexture_default">false</string>
 
     <string translatable="false" name="pref_flexfec_key">flexfec_preference</string>
     <string name="pref_flexfec_title">Codec-agnostic Flexible FEC.</string>
     <string name="pref_flexfec_dlg">Enable FlexFEC.</string>
-    <string translatable="false" name="pref_flexfec_default">false</string>
+    <string translatable="false" name="pref_flexfec_default">true</string>
 
     <string name="pref_value_enabled">Enabled</string>
     <string name="pref_value_disabled">Disabled</string>

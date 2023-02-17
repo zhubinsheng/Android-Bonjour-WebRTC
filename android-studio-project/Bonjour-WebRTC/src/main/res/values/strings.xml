@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="app_name">Bonjour WebRTC</string>
+    <string name="app_name">cast sink</string>
 
     <!-- actionbar menu -->
     <string name="menu_toggle_server">Toggle Server On/Off</string>

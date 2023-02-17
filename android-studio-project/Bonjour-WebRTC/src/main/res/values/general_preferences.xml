@@ -19,7 +19,7 @@
     <string name="pref_generalsettings_socketserver_category_title">Local socket server.</string>
 
     <string translatable="false" name="pref_generalsettings_socketserver_port_key">generalsettings_socketserver_port</string>
-    <string translatable="false" name="pref_generalsettings_socketserver_port_default">8888</string>
+    <string translatable="false" name="pref_generalsettings_socketserver_port_default">18181</string>
     <string name="pref_generalsettings_socketserver_port_title">Port Number.</string>
     <string name="pref_generalsettings_socketserver_port_dlg">Enter number of listening port (above 1024).</string>
 </resources>

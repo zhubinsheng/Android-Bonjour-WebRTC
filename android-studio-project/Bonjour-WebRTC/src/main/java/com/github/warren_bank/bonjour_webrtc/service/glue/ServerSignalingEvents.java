@@ -57,8 +57,8 @@ public class ServerSignalingEvents implements AppRTCClient.SignalingEvents {
             // what:
             //   - play an audio ringtone and display an accept/reject dialog
             signalingParams = params;
-
-            ServerService.getMainThreadHandler().post(
+            OrgAppspotApprtcGlue.startInboundCallActivity(context);
+            /*ServerService.getMainThreadHandler().post(
                 new Runnable() {
                     public void run() {
                         if (SharedPrefs.getCallAlertEnabled(context) && RuntimePermissions.canDrawOverlays(context)) {
@@ -69,7 +69,7 @@ public class ServerSignalingEvents implements AppRTCClient.SignalingEvents {
                         }
                     }
                 }
-            );
+            );*/
         }
     }
 

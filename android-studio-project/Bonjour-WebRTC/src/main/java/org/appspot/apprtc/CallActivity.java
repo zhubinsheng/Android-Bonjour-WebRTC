@@ -23,10 +23,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.media.projection.MediaProjection;
-import android.media.projection.MediaProjectionManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,21 +39,16 @@ import java.io.IOException;
 import java.lang.RuntimeException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import org.appspot.apprtc.AppRTCAudioManager.AudioDevice;
-import org.appspot.apprtc.AppRTCAudioManager.AudioManagerEvents;
+
 import org.appspot.apprtc.AppRTCClient.RoomConnectionParameters;
 import org.appspot.apprtc.AppRTCClient.SignalingParameters;
-import org.appspot.apprtc.PeerConnectionClient.DataChannelParameters;
 import org.appspot.apprtc.PeerConnectionClient.PeerConnectionParameters;
-import org.webrtc.Camera1Enumerator;
 import org.webrtc.Camera2Enumerator;
 import org.webrtc.CameraEnumerator;
 import org.webrtc.EglBase;
 import org.webrtc.FileVideoCapturer;
 import org.webrtc.IceCandidate;
 import org.webrtc.Logging;
-import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RendererCommon.ScalingType;
 import org.webrtc.ScreenCapturerAndroid;
 import org.webrtc.SessionDescription;
@@ -72,8 +64,8 @@ import org.webrtc.VideoSink;
  * and call view.
  */
 public class CallActivity extends Activity implements AppRTCClient.SignalingEvents,
-                                                      PeerConnectionClient.PeerConnectionEvents,
-                                                      CallFragment.OnCallEvents {
+        PeerConnectionClient.PeerConnectionEvents,
+        CallFragment.OnCallEvents {
   private static final String TAG = "CallRTCClient";
 
   public static final String EXTRA_ROOMID = "org.appspot.apprtc.ROOMID";
@@ -86,7 +78,7 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
   public static final String EXTRA_VIDEO_HEIGHT = "org.appspot.apprtc.VIDEO_HEIGHT";
   public static final String EXTRA_VIDEO_FPS = "org.appspot.apprtc.VIDEO_FPS";
   public static final String EXTRA_VIDEO_CAPTUREQUALITYSLIDER_ENABLED =
-      "org.appsopt.apprtc.VIDEO_CAPTUREQUALITYSLIDER";
+          "org.appsopt.apprtc.VIDEO_CAPTUREQUALITYSLIDER";
   public static final String EXTRA_VIDEO_BITRATE = "org.appspot.apprtc.VIDEO_BITRATE";
   public static final String EXTRA_VIDEOCODEC = "org.appspot.apprtc.VIDEOCODEC";
   public static final String EXTRA_HWCODEC_ENABLED = "org.appspot.apprtc.HWCODEC";
@@ -95,29 +87,29 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
   public static final String EXTRA_AUDIO_BITRATE = "org.appspot.apprtc.AUDIO_BITRATE";
   public static final String EXTRA_AUDIOCODEC = "org.appspot.apprtc.AUDIOCODEC";
   public static final String EXTRA_NOAUDIOPROCESSING_ENABLED =
-      "org.appspot.apprtc.NOAUDIOPROCESSING";
+          "org.appspot.apprtc.NOAUDIOPROCESSING";
   public static final String EXTRA_AECDUMP_ENABLED = "org.appspot.apprtc.AECDUMP";
   public static final String EXTRA_SAVE_INPUT_AUDIO_TO_FILE_ENABLED =
-      "org.appspot.apprtc.SAVE_INPUT_AUDIO_TO_FILE";
+          "org.appspot.apprtc.SAVE_INPUT_AUDIO_TO_FILE";
   public static final String EXTRA_OPENSLES_ENABLED = "org.appspot.apprtc.OPENSLES";
   public static final String EXTRA_DISABLE_BUILT_IN_AEC = "org.appspot.apprtc.DISABLE_BUILT_IN_AEC";
   public static final String EXTRA_DISABLE_BUILT_IN_AGC = "org.appspot.apprtc.DISABLE_BUILT_IN_AGC";
   public static final String EXTRA_DISABLE_BUILT_IN_NS = "org.appspot.apprtc.DISABLE_BUILT_IN_NS";
   public static final String EXTRA_DISABLE_WEBRTC_AGC_AND_HPF =
-      "org.appspot.apprtc.DISABLE_WEBRTC_GAIN_CONTROL";
+          "org.appspot.apprtc.DISABLE_WEBRTC_GAIN_CONTROL";
   public static final String EXTRA_DISPLAY_HUD = "org.appspot.apprtc.DISPLAY_HUD";
   public static final String EXTRA_TRACING = "org.appspot.apprtc.TRACING";
   public static final String EXTRA_CMDLINE = "org.appspot.apprtc.CMDLINE";
   public static final String EXTRA_RUNTIME = "org.appspot.apprtc.RUNTIME";
   public static final String EXTRA_VIDEO_FILE_AS_CAMERA = "org.appspot.apprtc.VIDEO_FILE_AS_CAMERA";
   public static final String EXTRA_SAVE_REMOTE_VIDEO_TO_FILE =
-      "org.appspot.apprtc.SAVE_REMOTE_VIDEO_TO_FILE";
+          "org.appspot.apprtc.SAVE_REMOTE_VIDEO_TO_FILE";
   public static final String EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_WIDTH =
-      "org.appspot.apprtc.SAVE_REMOTE_VIDEO_TO_FILE_WIDTH";
+          "org.appspot.apprtc.SAVE_REMOTE_VIDEO_TO_FILE_WIDTH";
   public static final String EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT =
-      "org.appspot.apprtc.SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT";
+          "org.appspot.apprtc.SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT";
   public static final String EXTRA_USE_VALUES_FROM_INTENT =
-      "org.appspot.apprtc.USE_VALUES_FROM_INTENT";
+          "org.appspot.apprtc.USE_VALUES_FROM_INTENT";
   public static final String EXTRA_DATA_CHANNEL_ENABLED = "org.appspot.apprtc.DATA_CHANNEL_ENABLED";
   public static final String EXTRA_ORDERED = "org.appspot.apprtc.ORDERED";
   public static final String EXTRA_MAX_RETRANSMITS_MS = "org.appspot.apprtc.MAX_RETRANSMITS_MS";
@@ -151,20 +143,19 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
   }
 
   private final ProxyVideoSink remoteProxyRenderer = new ProxyVideoSink();
-  private final ProxyVideoSink localProxyVideoSink = new ProxyVideoSink();
 
   private boolean isInboundCall;
 
-  @Nullable private PeerConnectionClient peerConnectionClient;
+  @Nullable
+  private PeerConnectionClient peerConnectionClient;
   @Nullable
   private AppRTCClient appRtcClient;
   @Nullable
   private SignalingParameters signalingParameters;
-  @Nullable private AppRTCAudioManager audioManager;
+
   @Nullable
   private SurfaceViewRenderer pipRenderer;
-  @Nullable
-  private SurfaceViewRenderer fullscreenRenderer;
+
   @Nullable
   private VideoFileRenderer videoFileRenderer;
   private final List<VideoSink> remoteSinks = new ArrayList<>();
@@ -184,7 +175,6 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
   private static Intent mediaProjectionPermissionResultData;
   private static int mediaProjectionPermissionResultCode;
   // True if local view is in the fullscreen renderer.
-  private boolean isSwappedFeeds;
 
   // Controls
   private CallFragment callFragment;
@@ -203,7 +193,7 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     // adding content.
     requestWindowFeature(Window.FEATURE_NO_TITLE);
     getWindow().addFlags(LayoutParams.FLAG_FULLSCREEN | LayoutParams.FLAG_KEEP_SCREEN_ON
-        | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
+            | LayoutParams.FLAG_SHOW_WHEN_LOCKED | LayoutParams.FLAG_TURN_SCREEN_ON);
     getWindow().getDecorView().setSystemUiVisibility(getSystemUiVisibility());
     setContentView(R.layout.activity_call);
 
@@ -212,27 +202,9 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
 
     // Create UI controls.
     pipRenderer = findViewById(R.id.pip_video_view);
-    fullscreenRenderer = findViewById(R.id.fullscreen_video_view);
     callFragment = new CallFragment();
     hudFragment = new HudFragment();
 
-    // Show/hide call control fragment on view click.
-    View.OnClickListener listener = new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        toggleCallControlFragmentVisibility();
-      }
-    };
-
-    // Swap feeds on pip view click.
-    pipRenderer.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View view) {
-        setSwappedFeeds(!isSwappedFeeds);
-      }
-    });
-
-    fullscreenRenderer.setOnClickListener(listener);
     remoteSinks.add(remoteProxyRenderer);
 
     final Intent intent = getIntent();
@@ -241,8 +213,8 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     isInboundCall = (roomId != null) && !roomId.isEmpty() && roomId.equals(Util.getSocketServerIpAddress(CallActivity.this)) && ServerService.isStarted();
 
     final EglBase eglBase = (isInboundCall)
-      ? ServerService.getPeerConnectionClient().getEglBase()
-      : EglBase.create();
+            ? ServerService.getPeerConnectionClient().getEglBase()
+            : EglBase.create();
 
     // Create video renderers.
     pipRenderer.init(eglBase.getEglBaseContext(), null);
@@ -255,28 +227,23 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       int videoOutHeight = intent.getIntExtra(EXTRA_SAVE_REMOTE_VIDEO_TO_FILE_HEIGHT, 0);
       try {
         videoFileRenderer = new VideoFileRenderer(
-            saveRemoteVideoToFile, videoOutWidth, videoOutHeight, eglBase.getEglBaseContext());
+                saveRemoteVideoToFile, videoOutWidth, videoOutHeight, eglBase.getEglBaseContext());
         remoteSinks.add(videoFileRenderer);
       } catch (IOException e) {
         throw new RuntimeException(
-            "Failed to open video file for output: " + saveRemoteVideoToFile, e);
+                "Failed to open video file for output: " + saveRemoteVideoToFile, e);
       }
     }
-    fullscreenRenderer.init(eglBase.getEglBaseContext(), null);
-    fullscreenRenderer.setScalingType(ScalingType.SCALE_ASPECT_FILL);
 
     pipRenderer.setZOrderMediaOverlay(true);
     pipRenderer.setEnableHardwareScaler(true /* enabled */);
-    fullscreenRenderer.setEnableHardwareScaler(false /* enabled */);
     // Start with local feed in fullscreen and swap it to the pip when the call is connected.
     setSwappedFeeds(true /* isSwappedFeeds */);
 
     // Check for mandatory permissions.
-    if (!RuntimePermissions.hasMandatoryPermissions(CallActivity.this)) {
-        logAndToast("Required permission(s) have been revoked since 'Bonjour WebRTC' was started.");
-        finish();
-        return;
-    }
+    /*if (!RuntimePermissions.hasMandatoryPermissions(CallActivity.this)) {
+      logAndToast("Required permission(s) have been revoked since 'Bonjour WebRTC' was started.");
+    }*/
 
     // Get Intent parameters.
     Log.d(TAG, "Room ID: " + roomId);
@@ -293,30 +260,30 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     int runTimeMs        = intent.getIntExtra(EXTRA_RUNTIME, 0);
 
     if (isInboundCall) {
-        peerConnectionClient     = ServerService.getPeerConnectionClient();
-        peerConnectionParameters = peerConnectionClient.getPeerConnectionParameters();
-        appRtcClient             = ServerService.getDirectRTCClient();
+      peerConnectionClient     = ServerService.getPeerConnectionClient();
+      peerConnectionParameters = peerConnectionClient.getPeerConnectionParameters();
+      appRtcClient             = ServerService.getDirectRTCClient();
 
-        ServerService.getServerPeerConnectionEvents().setCallActivity(CallActivity.this);
-        ServerService.getServerSignalingEvents().setCallActivity(CallActivity.this);      // triggers call to: onConnectedToRoom(signalingParams)
+      ServerService.getServerPeerConnectionEvents().setCallActivity(CallActivity.this);
+      ServerService.getServerSignalingEvents().setCallActivity(CallActivity.this);      // triggers call to: onConnectedToRoom(signalingParams)
     }
     else {
-        peerConnectionClient     = OrgAppspotApprtcGlue.getPeerConnectionClient(getApplicationContext(), eglBase, CallActivity.this, intent);
-        peerConnectionParameters = peerConnectionClient.getPeerConnectionParameters();
+      peerConnectionClient     = OrgAppspotApprtcGlue.getPeerConnectionClient(getApplicationContext(), eglBase, CallActivity.this, intent);
+      peerConnectionParameters = peerConnectionClient.getPeerConnectionParameters();
 
-        // Create connection client.
-        // Use DirectRTCClient if room name is an IP.
-        // Otherwise, show error message and finish.
-        if (loopback || !DirectRTCClient.IP_PATTERN.matcher(roomId).matches()) {
-            logAndToast(getString(R.string.error_invalid_room_name));
-            Log.e(TAG, "Room name is incorrect! Value should be an IP address on the LAN (ex: 192.168.1.100:8888). Value is: '" + roomId + "'.");
-            finish();
-            return;
-        }
-        else {
-            Log.i(TAG, "Using DirectRTCClient because room name looks like an IP.");
-            appRtcClient = new DirectRTCClient(CallActivity.this, CallActivity.this);
-        }
+      // Create connection client.
+      // Use DirectRTCClient if room name is an IP.
+      // Otherwise, show error message and finish.
+      if (loopback || !DirectRTCClient.IP_PATTERN.matcher(roomId).matches()) {
+        logAndToast(getString(R.string.error_invalid_room_name));
+        Log.e(TAG, "Room name is incorrect! Value should be an IP address on the LAN (ex: 192.168.1.100:8888). Value is: '" + roomId + "'.");
+        finish();
+        return;
+      }
+      else {
+        Log.i(TAG, "Using DirectRTCClient because room name looks like an IP.");
+        appRtcClient = new DirectRTCClient(CallActivity.this, CallActivity.this);
+      }
     }
 
     Log.d(TAG, "VIDEO_FILE: '" + intent.getStringExtra(EXTRA_VIDEO_FILE_AS_CAMERA) + "'");
@@ -324,7 +291,7 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     // Create connection parameters.
     String urlParameters = intent.getStringExtra(EXTRA_URLPARAMETERS);
     roomConnectionParameters =
-        new RoomConnectionParameters(null, roomId, loopback, urlParameters);
+            new RoomConnectionParameters(null, roomId, loopback, urlParameters);
 
     // Create CPU monitor
     if (CpuMonitor.isSupported()) {
@@ -351,18 +318,14 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       }, runTimeMs);
     }
 
-    if (screencaptureEnabled) {
-      startScreenCapture();
-    } else {
-      startCall();
-    }
+    startCall();
   }
 
   @TargetApi(17)
   private DisplayMetrics getDisplayMetrics() {
     DisplayMetrics displayMetrics = new DisplayMetrics();
     WindowManager windowManager =
-        (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
+            (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
     windowManager.getDefaultDisplay().getRealMetrics(displayMetrics);
     return displayMetrics;
   }
@@ -374,28 +337,6 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       flags |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     }
     return flags;
-  }
-
-  @TargetApi(21)
-  private void startScreenCapture() {
-    MediaProjectionManager mediaProjectionManager =
-        (MediaProjectionManager) getApplication().getSystemService(
-            Context.MEDIA_PROJECTION_SERVICE);
-    startActivityForResult(
-        mediaProjectionManager.createScreenCaptureIntent(), CAPTURE_PERMISSION_REQUEST_CODE);
-  }
-
-  @Override
-  public void onActivityResult(int requestCode, int resultCode, Intent data) {
-    if (requestCode != CAPTURE_PERMISSION_REQUEST_CODE)
-      return;
-    mediaProjectionPermissionResultCode = resultCode;
-    mediaProjectionPermissionResultData = data;
-    startCall();
-  }
-
-  private boolean useCamera2() {
-    return Camera2Enumerator.isSupported(this) && getIntent().getBooleanExtra(EXTRA_CAMERA2, true);
   }
 
   private boolean captureToTexture() {
@@ -441,7 +382,7 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       return null;
     }
     return new ScreenCapturerAndroid(
-        mediaProjectionPermissionResultData, new MediaProjection.Callback() {
+            mediaProjectionPermissionResultData, new MediaProjection.Callback() {
       @Override
       public void onStop() {
         reportError("User revoked permission to capture the screen.");
@@ -456,9 +397,6 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     activityRunning = false;
     // Don't stop the video when using screencapture to allow user to show other apps to the remote
     // end.
-    if (peerConnectionClient != null && !screencaptureEnabled) {
-      peerConnectionClient.stopVideoSource();
-    }
     if (cpuMonitor != null) {
       cpuMonitor.pause();
     }
@@ -469,9 +407,6 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     super.onStart();
     activityRunning = true;
     // Video is not paused for screencapture. See onPause.
-    if (peerConnectionClient != null && !screencaptureEnabled) {
-      peerConnectionClient.startVideoSource();
-    }
     if (cpuMonitor != null) {
       cpuMonitor.resume();
     }
@@ -496,21 +431,15 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
 
   @Override
   public void onCameraSwitch() {
-    if (peerConnectionClient != null) {
-      peerConnectionClient.switchCamera();
-    }
   }
 
   @Override
   public void onVideoScalingSwitch(ScalingType scalingType) {
-    fullscreenRenderer.setScalingType(scalingType);
+
   }
 
   @Override
   public void onCaptureFormatChange(int width, int height, int framerate) {
-    if (peerConnectionClient != null) {
-      peerConnectionClient.changeCaptureFormat(width, height, framerate);
-    }
   }
 
   @Override
@@ -527,7 +456,6 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
   public boolean onToggleMic() {
     if (peerConnectionClient != null) {
       micEnabled = !micEnabled;
-      peerConnectionClient.setAudioEnabled(micEnabled);
     }
     return micEnabled;
   }
@@ -559,27 +487,12 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     callStartedTimeMs = System.currentTimeMillis();
 
     if (!isInboundCall) {
-        logAndToast(getString(R.string.connecting_to, roomConnectionParameters.roomId));
+      logAndToast(getString(R.string.connecting_to, roomConnectionParameters.roomId));
 
-        // Start room connection.
-        appRtcClient.connect(roomConnectionParameters);
+      // Start room connection.
+      appRtcClient.connect(roomConnectionParameters);
     }
 
-    // Create and audio manager that will take care of audio routing,
-    // audio modes, audio device enumeration etc.
-    audioManager = AppRTCAudioManager.create(getApplicationContext());
-    // Store existing audio settings and change audio mode to
-    // MODE_IN_COMMUNICATION for best possible VoIP performance.
-    Log.d(TAG, "Starting the audio manager...");
-    audioManager.start(new AudioManagerEvents() {
-      // This method will be called each time the number of available audio
-      // devices has changed.
-      @Override
-      public void onAudioDeviceChanged(
-          AudioDevice audioDevice, Set<AudioDevice> availableAudioDevices) {
-        onAudioManagerDevicesChanged(audioDevice, availableAudioDevices);
-      }
-    });
   }
 
   // Should be called from UI thread
@@ -595,23 +508,13 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     setSwappedFeeds(false /* isSwappedFeeds */);
   }
 
-  // This method is called when the audio manager reports audio device change,
-  // e.g. from wired headset to speakerphone.
-  private void onAudioManagerDevicesChanged(
-      final AudioDevice device, final Set<AudioDevice> availableDevices) {
-    Log.d(TAG, "onAudioManagerDevicesChanged: " + availableDevices + ", "
-            + "selected: " + device);
-    // TODO(henrika): add callback handler.
-  }
-
   // Disconnect from remote resources, dispose of local resources, and exit.
   private void disconnect() {
     activityRunning = false;
     remoteProxyRenderer.setTarget(null);
-    localProxyVideoSink.setTarget(null);
 
     if (isInboundCall) {
-        ServerService.doHangup(CallActivity.this);
+      ServerService.doHangup(CallActivity.this);
     }
     else {
       if (appRtcClient != null)
@@ -624,17 +527,11 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       pipRenderer.release();
     if (videoFileRenderer != null)
       videoFileRenderer.release();
-    if (fullscreenRenderer != null)
-      fullscreenRenderer.release();
-    if (audioManager != null)
-      audioManager.stop();
 
     appRtcClient         = null;
     peerConnectionClient = null;
     pipRenderer          = null;
     videoFileRenderer    = null;
-    fullscreenRenderer   = null;
-    audioManager         = null;
 
     if (!isFinishing())
       finish();
@@ -646,19 +543,19 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       disconnect();
     } else {
       new AlertDialog.Builder(this)
-          .setTitle(getText(R.string.channel_error_title))
-          .setMessage(errorMessage)
-          .setCancelable(false)
-          .setNeutralButton(R.string.ok,
-              new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                  dialog.cancel();
-                  disconnect();
-                }
-              })
-          .create()
-          .show();
+              .setTitle(getText(R.string.channel_error_title))
+              .setMessage(errorMessage)
+              .setCancelable(false)
+              .setNeutralButton(R.string.ok,
+                      new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+                          dialog.cancel();
+                          disconnect();
+                        }
+                      })
+              .create()
+              .show();
     }
   }
 
@@ -684,43 +581,11 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     });
   }
 
-  private @Nullable VideoCapturer createVideoCapturer() {
-    final VideoCapturer videoCapturer;
-    String videoFileAsCamera = getIntent().getStringExtra(EXTRA_VIDEO_FILE_AS_CAMERA);
-    if (videoFileAsCamera != null) {
-      try {
-        videoCapturer = new FileVideoCapturer(videoFileAsCamera);
-      } catch (IOException e) {
-        reportError("Failed to open video file for emulated camera");
-        return null;
-      }
-    } else if (screencaptureEnabled) {
-      return createScreenCapturer();
-    } else if (useCamera2()) {
-      if (!captureToTexture()) {
-        reportError(getString(R.string.camera2_texture_only_error));
-        return null;
-      }
-
-      Logging.d(TAG, "Creating capturer using camera2 API.");
-      videoCapturer = createCameraCapturer(new Camera2Enumerator(this));
-    } else {
-      Logging.d(TAG, "Creating capturer using camera1 API.");
-      videoCapturer = createCameraCapturer(new Camera1Enumerator(captureToTexture()));
-    }
-    if (videoCapturer == null) {
-      reportError("Failed to open camera");
-      return null;
-    }
-    return videoCapturer;
-  }
-
   private void setSwappedFeeds(boolean isSwappedFeeds) {
     Logging.d(TAG, "setSwappedFeeds: " + isSwappedFeeds);
-    this.isSwappedFeeds = isSwappedFeeds;
-    localProxyVideoSink.setTarget(isSwappedFeeds ? fullscreenRenderer : pipRenderer);
-    remoteProxyRenderer.setTarget(isSwappedFeeds ? pipRenderer : fullscreenRenderer);
-    fullscreenRenderer.setMirror(isSwappedFeeds);
+
+    remoteProxyRenderer.setTarget(pipRenderer);
+
     pipRenderer.setMirror(!isSwappedFeeds);
   }
 
@@ -732,12 +597,11 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
 
     signalingParameters = params;
     logAndToast("Creating peer connection, delay=" + delta + "ms");
-    VideoCapturer videoCapturer = null;
-    if (peerConnectionParameters.videoCallEnabled) {
-      videoCapturer = createVideoCapturer();
-    }
-    peerConnectionClient.createPeerConnection(
-        localProxyVideoSink, remoteSinks, videoCapturer, signalingParameters);
+
+//    VideoCapturer videoCapturer = createVideoCapturer();
+    peerConnectionClient.createPeerConnection(remoteSinks, null, signalingParameters);
+
+//    peerConnectionClient.createPeerConnection(remoteSinks, signalingParameters);
 
     if (signalingParameters.initiator) {
       logAndToast("Creating OFFER...");
