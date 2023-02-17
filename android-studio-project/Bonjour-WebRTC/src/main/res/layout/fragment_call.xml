@@ -33,6 +33,7 @@
            android:layout_height="48dp"/>
 
        <ImageButton
+           android:visibility="gone"
            android:id="@+id/button_call_switch_camera"
            android:background="@android:drawable/ic_menu_camera"
            android:contentDescription="@string/switch_camera"
@@ -54,6 +55,7 @@
            android:layout_height="48dp"/>
 
        <ImageButton
+           android:visibility="gone"
            android:id="@+id/button_call_toggle_mic"
            android:background="@android:drawable/ic_btn_speak_now"
            android:contentDescription="@string/toggle_mic"

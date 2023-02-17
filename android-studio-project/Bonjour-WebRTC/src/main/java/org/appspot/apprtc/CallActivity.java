@@ -304,8 +304,8 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     hudFragment.setArguments(intent.getExtras());
     // Activate call and HUD fragments and start the call.
     FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.add(R.id.call_fragment_container, callFragment);
     ft.add(R.id.hud_fragment_container, hudFragment);
+    ft.add(R.id.call_fragment_container, callFragment);
     ft.commit();
 
     // For command line execution run connection for <runTimeMs> and exit.
@@ -319,15 +319,7 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
     }
 
     startCall();
-  }
 
-  @TargetApi(17)
-  private DisplayMetrics getDisplayMetrics() {
-    DisplayMetrics displayMetrics = new DisplayMetrics();
-    WindowManager windowManager =
-            (WindowManager) getApplication().getSystemService(Context.WINDOW_SERVICE);
-    windowManager.getDefaultDisplay().getRealMetrics(displayMetrics);
-    return displayMetrics;
   }
 
   @TargetApi(19)
@@ -337,57 +329,6 @@ public class CallActivity extends Activity implements AppRTCClient.SignalingEven
       flags |= View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     }
     return flags;
-  }
-
-  private boolean captureToTexture() {
-    return getIntent().getBooleanExtra(EXTRA_CAPTURETOTEXTURE_ENABLED, false);
-  }
-
-  private @Nullable VideoCapturer createCameraCapturer(CameraEnumerator enumerator) {
-    final String[] deviceNames = enumerator.getDeviceNames();
-
-    // First, try to find front facing camera
-    Logging.d(TAG, "Looking for front facing cameras.");
-    for (String deviceName : deviceNames) {
-      if (enumerator.isFrontFacing(deviceName)) {
-        Logging.d(TAG, "Creating front facing camera capturer.");
-        VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
-
-        if (videoCapturer != null) {
-          return videoCapturer;
-        }
-      }
-    }
-
-    // Front facing camera not found, try something else
-    Logging.d(TAG, "Looking for other cameras.");
-    for (String deviceName : deviceNames) {
-      if (!enumerator.isFrontFacing(deviceName)) {
-        Logging.d(TAG, "Creating other camera capturer.");
-        VideoCapturer videoCapturer = enumerator.createCapturer(deviceName, null);
-
-        if (videoCapturer != null) {
-          return videoCapturer;
-        }
-      }
-    }
-
-    return null;
-  }
-
-  @TargetApi(21)
-  private @Nullable VideoCapturer createScreenCapturer() {
-    if (mediaProjectionPermissionResultCode != Activity.RESULT_OK) {
-      reportError("User didn't give permission to capture the screen.");
-      return null;
-    }
-    return new ScreenCapturerAndroid(
-            mediaProjectionPermissionResultData, new MediaProjection.Callback() {
-      @Override
-      public void onStop() {
-        reportError("User revoked permission to capture the screen.");
-      }
-    });
   }
 
   // Activity interfaces

@@ -11,10 +11,10 @@
 
     <org.webrtc.SurfaceViewRenderer
         android:id="@+id/pip_video_view"
-        android:layout_height="144dp"
+        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"/>
+        android:layout_gravity="center|end"
+/>
 
     <FrameLayout
         android:id="@+id/call_fragment_container"
