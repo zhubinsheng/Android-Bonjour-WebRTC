@@ -469,19 +469,21 @@ public class PeerConnectionClient {
     new Thread(new Runnable() {
       @Override
       public void run() {
-        try {
-          Thread.sleep(1000);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }finally {
-          remoteVideoTrack = getRemoteVideoTrack();
-          Log.e(TAG, "remoteVideoTrack: " + remoteVideoTrack);
+        while (peerConnection == null){
+          Log.e(TAG, "wait: " + peerConnection);
+          try {
+            Thread.sleep(100);
+          } catch (InterruptedException e) {
+            e.printStackTrace();
+          }
+        }
+        remoteVideoTrack = getRemoteVideoTrack();
+        Log.e(TAG, "remoteVideoTrack: " + remoteVideoTrack);
 
-          if (remoteVideoTrack != null){
-            remoteVideoTrack.setEnabled(true);
-            for (VideoSink remoteSink : remoteSinks) {
-              remoteVideoTrack.addSink(remoteSink);
-            }
+        if (remoteVideoTrack != null){
+          remoteVideoTrack.setEnabled(true);
+          for (VideoSink remoteSink : remoteSinks) {
+            remoteVideoTrack.addSink(remoteSink);
           }
         }
       }

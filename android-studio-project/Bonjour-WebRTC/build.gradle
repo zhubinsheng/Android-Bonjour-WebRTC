@@ -18,9 +18,10 @@ android {
         versionName project.ext.releaseVersion
         versionCode project.ext.releaseVersionCode
 
-        archivesBaseName += "-$versionName"
+//        archivesBaseName += "-$versionName"
     }
 
+/*
     flavorDimensions "languageResources"
 
     productFlavors {
@@ -31,6 +32,7 @@ android {
             dimension "languageResources"
         }
     }
+*/
 
     buildTypes {
         release {
@@ -55,7 +57,7 @@ android {
         abi {
             enable true
             reset()
-            include "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
+            include "arm64-v8a"/*, "armeabi-v7a", "x86", "x86_64"*/
             universalApk false
         }
     }
@@ -72,6 +74,7 @@ dependencies {
 
     implementation group: 'com.infobip', name: 'google-webrtc', version: '1.0.39079'
 
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
 
     compileOnly         'com.android.support:support-annotations:' + project.ext.libVersionSupport     // ( 22.0 KB) https://mvnrepository.com/artifact/com.android.support/support-annotations?repo=google
     annotationProcessor 'com.android.support:support-annotations:' + project.ext.libVersionSupport
