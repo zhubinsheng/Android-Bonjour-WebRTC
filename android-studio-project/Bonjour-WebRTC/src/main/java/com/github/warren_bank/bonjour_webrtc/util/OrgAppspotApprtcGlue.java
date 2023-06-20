@@ -149,9 +149,9 @@ public final class OrgAppspotApprtcGlue {
                 CallActivity.EXTRA_DISABLE_WEBRTC_AGC_AND_HPF, R.string.pref_disable_webrtc_agc_and_hpf_key, useValuesFromIntent, intentIn);
 
         // Get video resolution from settings.
-        int videoWidth = 0;
-        int videoHeight = 0;
-        if (useValuesFromIntent) {
+        int videoWidth = 2560;
+        int videoHeight = 1440;
+        /*if (useValuesFromIntent) {
             videoWidth = intentIn.getIntExtra(CallActivity.EXTRA_VIDEO_WIDTH, 0);
             videoHeight = intentIn.getIntExtra(CallActivity.EXTRA_VIDEO_HEIGHT, 0);
         }
@@ -168,11 +168,11 @@ public final class OrgAppspotApprtcGlue {
                     videoHeight = 0;
                 }
             }
-        }
+        }*/
 
         // Get camera fps from settings.
-        int cameraFps = 0;
-        if (useValuesFromIntent) {
+        int cameraFps = 60;
+        /*if (useValuesFromIntent) {
             cameraFps = intentIn.getIntExtra(CallActivity.EXTRA_VIDEO_FPS, 0);
         }
         if (cameraFps == 0) {
@@ -185,7 +185,7 @@ public final class OrgAppspotApprtcGlue {
                     cameraFps = 0;
                 }
             }
-        }
+        }*/
 
         // Check capture quality slider flag.
         boolean captureQualitySlider = sharedPrefGetBoolean(sharedPreferences, context, R.string.pref_capturequalityslider_key,

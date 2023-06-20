@@ -571,7 +571,7 @@ public class PeerConnectionClient {
     // Use ECDSA encryption.
     rtcConfig.keyType = PeerConnection.KeyType.ECDSA;
     // Enable DTLS for normal calls and disable for loopback calls.
-    rtcConfig.enableDtlsSrtp = !peerConnectionParameters.loopback;
+//    rtcConfig.enableDtlsSrtp = !peerConnectionParameters.loopback;
     rtcConfig.sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN;
 
     peerConnection = factory.createPeerConnection(rtcConfig, pcObserver);

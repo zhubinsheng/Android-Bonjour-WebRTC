@@ -70,7 +70,7 @@
     <string translatable="false" name="pref_maxvideobitratevalue_key">maxvideobitratevalue_preference</string>
     <string name="pref_maxvideobitratevalue_title">Video encoder maximum bitrate.</string>
     <string name="pref_maxvideobitratevalue_dlg">Enter video encoder maximum bitrate in kbps.</string>
-    <string translatable="false" name="pref_maxvideobitratevalue_default">1700</string>
+    <string translatable="false" name="pref_maxvideobitratevalue_default">4700</string>
 
     <string translatable="false" name="pref_videocodec_key">videocodec_preference</string>
     <string name="pref_videocodec_title">Default video codec.</string>
@@ -90,7 +90,7 @@
     <string translatable="false" name="pref_flexfec_key">flexfec_preference</string>
     <string name="pref_flexfec_title">Codec-agnostic Flexible FEC.</string>
     <string name="pref_flexfec_dlg">Enable FlexFEC.</string>
-    <string translatable="false" name="pref_flexfec_default">false</string>
+    <string translatable="false" name="pref_flexfec_default">true</string>
 
     <string name="pref_value_enabled">Enabled</string>
     <string name="pref_value_disabled">Disabled</string>
