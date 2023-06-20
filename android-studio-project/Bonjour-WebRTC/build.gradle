@@ -14,7 +14,7 @@ android {
         minSdkVersion project.ext.minSdkVersion
         targetSdkVersion project.ext.targetSdkVersion
 
-        applicationId "com.github.warren_bank.bonjour_webrtc"
+        applicationId "com.github.cast"
         versionName project.ext.releaseVersion
         versionCode project.ext.releaseVersionCode
 
@@ -55,7 +55,7 @@ android {
         abi {
             enable true
             reset()
-            include "arm64-v8a", "armeabi-v7a", "x86", "x86_64"
+            include "arm64-v8a"
             universalApk false
         }
     }
@@ -75,4 +75,6 @@ dependencies {
 
     compileOnly         'com.android.support:support-annotations:' + project.ext.libVersionSupport     // ( 22.0 KB) https://mvnrepository.com/artifact/com.android.support/support-annotations?repo=google
     annotationProcessor 'com.android.support:support-annotations:' + project.ext.libVersionSupport
+
+    implementation 'org.java-websocket:Java-WebSocket:1.5.3'
 }
