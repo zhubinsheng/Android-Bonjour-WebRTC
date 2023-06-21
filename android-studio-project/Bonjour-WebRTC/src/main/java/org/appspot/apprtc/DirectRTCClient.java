@@ -24,6 +24,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.appspot.apprtc.ws.MyWebSocketServer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,7 +64,9 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
   private final SignalingEvents events;
   private final ExecutorService executor;
   @Nullable
-  private TCPChannelClient tcpClient;
+//  private TCPChannelClient tcpClient;
+
+  private MyWebSocketServer myWebsocketServer;
   private RoomConnectionParameters connectionParameters;
 
   private enum ConnectionState { NEW, CONNECTED, CLOSED, ERROR }
@@ -116,7 +120,7 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
   }
 
   public void restartServer() {
-    if ((tcpClient != null) && tcpClient.isServer()) {
+/*    if ((tcpClient != null) && tcpClient.isServer()) {
       execute(new Runnable() {
         @Override
         public void run() {
@@ -128,6 +132,7 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
     if (myWebsocketServer != null){
       //todo
     }
+    }*/
   }
 
   /**
@@ -207,7 +212,7 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
       }
       if ((executor != null) && !executor.isShutdown() && !executor.isTerminated())
         executor.shutdown();
-    }
+    }*/
   }
 
   @Override
@@ -272,9 +277,14 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
       public void run() {
         JSONObject json = new JSONObject();
 //        jsonPut(json, "type", "candidate");
+        // jsonPut(json, "sdpMLineIndex", candidate.sdpMLineIndex);
+        // jsonPut(json, "sdpMid", candidate.sdpMid);
+        // jsonPut(json, "sdp", candidate.sdp);
+
+        jsonPut(json, "type", "candidate");
         jsonPut(json, "sdpMLineIndex", candidate.sdpMLineIndex);
         jsonPut(json, "sdpMid", candidate.sdpMid);
-        jsonPut(json, "sdp", candidate.sdp);
+        jsonPut(json, "candidate", candidate.sdp);
 
         if (roomState != ConnectionState.CONNECTED) {
           reportError("Sending ICE candidate in non connected state.");
@@ -405,7 +415,7 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
       @Override
       public void run() {
         if (roomState != ConnectionState.ERROR) {
-          roomState = ConnectionState.ERROR;
+//          roomState = ConnectionState.ERROR;
           events.onChannelError(errorMessage);
         }
       }
@@ -446,8 +456,8 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
   // Converts a Java candidate to a JSONObject.
   private static JSONObject toJsonCandidate(final IceCandidate candidate) {
     JSONObject json = new JSONObject();
-    jsonPut(json, "label", candidate.sdpMLineIndex);
-    jsonPut(json, "id", candidate.sdpMid);
+    jsonPut(json, "sdpMLineIndex", candidate.sdpMLineIndex);
+    jsonPut(json, "sdpMid", candidate.sdpMid);
     jsonPut(json, "candidate", candidate.sdp);
     return json;
   }
@@ -455,6 +465,7 @@ public class DirectRTCClient implements AppRTCClient, TCPChannelClient.TCPChanne
   // Converts a JSON candidate to a Java object.
   private static IceCandidate toJavaCandidate(JSONObject json) throws JSONException {
     return new IceCandidate(
-        json.getString("sdpMid"), json.getInt("sdpMLineIndex"), json.getString("sdp"));
+        // json.getString("sdpMid"), json.getInt("sdpMLineIndex"), json.getString("sdp"));
+        json.getString("sdpMid"), json.getInt("sdpMLineIndex"), json.getString("candidate"));
   }
 }

@@ -3,8 +3,8 @@ project.ext {
     releaseVersion     = '001.03.09-16API'
     javaVersion        = JavaVersion.VERSION_1_8
     minSdkVersion      = 16
-    targetSdkVersion   = 33
-    compileSdkVersion  = 33
+    targetSdkVersion   = 32
+    compileSdkVersion  = 32
     buildToolsVersion  = '33.0.1'
 
     libVersionJmDNS    = '3.5.5'
