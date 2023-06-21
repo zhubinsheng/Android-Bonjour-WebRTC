@@ -179,7 +179,7 @@ public class MainActivity extends Activity {
         super.onDestroy();
         Log.e("MainActivity", "onDestroy");
 
-//        ServerService.doStop(MainActivity.this);
+        ServerService.doStop(MainActivity.this);
     }
 
     @Override
@@ -192,9 +192,9 @@ public class MainActivity extends Activity {
                     if (!ServerService.isStarted())
                         MulticastLockMgr.acquire(MainActivity.this);
 
-//                    bonjour = JmDNS.create(Util.getWlanIpAddress_InetAddress(MainActivity.this));
+                    bonjour = JmDNS.create(Util.getWlanIpAddress_InetAddress(MainActivity.this));
 
-//                    bonjour.addServiceListener(BONJOUR_SERVICE_TYPE, bonjourServiceListener);
+                    bonjour.addServiceListener(BONJOUR_SERVICE_TYPE, bonjourServiceListener);
                 }
                 catch(Exception e) {}
             }
